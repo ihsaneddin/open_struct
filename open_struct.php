@@ -14,9 +14,18 @@ class OpenStruct {
     public $properties;
 
     function __construct($properties = array()) {
-        $this->properties = $properties;
+
+        $this->__assign_properties($properties);
         $this->extend_method(__CLASS__, self::MISSING_METHOD);
         $this->extend_method(__CLASS__, self::EVAL_METHOD);
+    }
+
+    protected function __assign_properties($properties= array()){
+      foreach ($properties as $key => $value) {
+        if ( !is_array($this->properties) ) $this->properties= array();
+        if ( is_array($value) ) $value = new self($value);
+        $this->properties[$key] = $value;
+      }
     }
 
     function __call($method, $arguments) {
