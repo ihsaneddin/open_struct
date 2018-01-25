@@ -28,6 +28,19 @@ class OpenStruct {
       }
     }
 
+    public function toArray(){
+      $arr = array();
+
+      foreach ($this->properties as $key => $value) {
+        if ($value instanceOf \OpenStruct){
+          array_push($arr, $value->toArray());
+        }else{
+          array_push($arr, $value);
+        }
+      }
+      return $arr;
+    }
+
     function __call($method, $arguments) {
         return $this->send($method, $arguments);
     }
